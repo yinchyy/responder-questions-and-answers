@@ -94,7 +94,7 @@ describe('question repository', () => {
 
   test('should return answer object with specified id', async () => {
     expect(
-      await questionRepo.getAnwerById(
+      await questionRepo.getAnswer(
         '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
         'f080d447-d185-4b13-8d9e-34d04980e8a6'
       )
