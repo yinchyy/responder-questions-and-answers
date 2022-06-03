@@ -120,27 +120,22 @@ describe('question repository', () => {
     ).toHaveLength(0)
   })
 
-  test('should throw error if any of the properties is missing', async () => {
-    expect(await questionRepo.addQuestion({})).toThrow(Error)
-    expect(await questionRepo.addQuestion({ author: 'John Doe' })).toThrow(
-      Error
-    )
+  test('should not do anything if any of the properties is missing', async () => {
+    const before = JSON.stringify(await questionRepo.getQuestions())
+    await questionRepo.addQuestion({ test: 'test' })
+    const after = JSON.stringify(await questionRepo.getQuestions())
+    expect(before).toBe(after)
   })
 
   test('should add question to repository', async () => {
-    expect(async () => {
-      await questionRepo.addQuestion({
-        author: 'John Doe',
-        summary: 'Do you like sun?'
-      })
-      if (
-        JSON.stringify(questionRepo.getQuestions()).includes(
-          `"author":"John Doe","summary":"Do you like sun?"`
-        )
-      ) {
-        return true
-      }
-      return false
-    }).toReturn(true)
+    await questionRepo.addQuestion({
+      author: 'John Doe',
+      summary: 'Do you like sun?'
+    })
+    expect(
+      JSON.stringify(await questionRepo.getQuestions()).includes(
+        `"author":"John Doe","summary":"Do you like sun?"`
+      )
+    ).toBe(true)
   })
 })
