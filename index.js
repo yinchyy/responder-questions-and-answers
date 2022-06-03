@@ -27,7 +27,10 @@ app.get('/questions/:questionId', async (req, res) => {
   res.json(questions)
 })
 
-app.post('/questions', (req, res) => {})
+app.post('/questions', async (req, res) => {
+  const query = await req.repositories.questionRepo.addQuestion(req.body)
+  res.json(query)
+})
 
 app.get('/questions/:questionId/answers', async (req, res) => {
   const answers = await req.repositories.questionRepo.getAnswers(
@@ -43,6 +46,7 @@ app.get('/questions/:questionId/answers/:answerId', async (req, res) => {
     req.params.questionId,
     req.params.answerId
   )
+  console.log(Object.keys(answer))
   res.json(answer)
 })
 
