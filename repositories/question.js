@@ -25,7 +25,15 @@ const makeQuestionRepository = fileName => {
     }
     return []
   }
-  const getAnswer = async (questionId, answerId) => {}
+  const getAnswer = async (questionId, answerId) => {
+    const answers = await getAnswers(questionId)
+    for (const answerIndex in Object.keys(answers)) {
+      if (answers[answerIndex].id === answerId) {
+        return answers[answerIndex]
+      }
+    }
+    return []
+  }
   const addAnswer = async (questionId, answer) => {}
 
   return {
