@@ -32,7 +32,18 @@ describe('question repository', () => {
         id: '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
         summary: 'Who are you?',
         author: 'Tim Doods',
-        answers: []
+        answers: [
+          {
+            id: 'f080d447-d185-4b13-8d9e-34d04980e8a6',
+            author: 'Anakin Earthwalker',
+            summary: 'I am your father.'
+          },
+          {
+            id: 'fa309210-b8fd-4065-ace3-73dce62f6014',
+            author: 'Luke Mattews',
+            summary: 'I am a postman. Here is your mail.'
+          }
+        ]
       }
     ]
 
@@ -40,19 +51,44 @@ describe('question repository', () => {
 
     expect(await questionRepo.getQuestions()).toHaveLength(2)
   })
-  test('should return object with specified id', async () => {
+
+  test('should return question object with specified id', async () => {
     expect(
       await questionRepo.getQuestionById('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
     ).toEqual({
       id: '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
       summary: 'Who are you?',
       author: 'Tim Doods',
-      answers: []
+      answers: [
+        {
+          id: 'f080d447-d185-4b13-8d9e-34d04980e8a6',
+          author: 'Anakin Earthwalker',
+          summary: 'I am your father.'
+        },
+        {
+          id: 'fa309210-b8fd-4065-ace3-73dce62f6014',
+          author: 'Luke Mattews',
+          summary: 'I am a postman. Here is your mail.'
+        }
+      ]
     })
   })
-  test('should return empty list if question with specified id is not found', async () => {
+
+  test('should return question list of 0 if question with specified id is not found', async () => {
     expect(
       await questionRepo.getQuestionById('this-is-not-even-an-proper-id-123')
+    ).toHaveLength(0)
+  })
+
+  test('should return answers list of 2 from question with specified id', async () => {
+    expect(
+      await questionRepo.getAnswers('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
+    ).toHaveLength(2)
+  })
+
+  test('should return question list of 0 if question with specified id is not found', async () => {
+    expect(
+      await questionRepo.getAnswers('this-is-not-even-an-proper-id-123')
     ).toHaveLength(0)
   })
 })
