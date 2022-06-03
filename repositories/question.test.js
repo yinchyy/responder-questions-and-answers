@@ -91,4 +91,32 @@ describe('question repository', () => {
       await questionRepo.getAnswers('this-is-not-even-an-proper-id-123')
     ).toHaveLength(0)
   })
+
+  test('should return answer object with specified id', async () => {
+    expect(
+      await questionRepo.getAnwerById(
+        '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
+        'f080d447-d185-4b13-8d9e-34d04980e8a6'
+      )
+    ).toEqual({
+      id: 'f080d447-d185-4b13-8d9e-34d04980e8a6',
+      author: 'Anakin Earthwalker',
+      summary: 'I am your father.'
+    })
+  })
+
+  test('should return anwer list of 0 if question or answer with specified id is not found', async () => {
+    expect(
+      await questionRepo.getAnswer(
+        'this-is-not-even-an-proper-id-123',
+        'this-is-not-even-an-proper-id-123'
+      )
+    ).toHaveLength(0)
+    expect(
+      await questionRepo.getAnswer(
+        '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
+        'this-is-not-even-an-proper-id-123'
+      )
+    ).toHaveLength(0)
+  })
 })
