@@ -143,7 +143,9 @@ describe('question repository', () => {
     const before = JSON.stringify(
       await questionRepo.getAnswers('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
     )
-    await questionRepo.addAnswer({ test: 'test' })
+    await questionRepo.addAnswer('50cb7124-39ab-4380-b90a-19d9f4eccc7f', {
+      test: 'test'
+    })
     const after = JSON.stringify(
       await questionRepo.getAnswers('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
     )
@@ -154,7 +156,7 @@ describe('question repository', () => {
     const before = JSON.stringify(
       await questionRepo.getAnswers('this-is-not-even-an-proper-id-123')
     )
-    await questionRepo.addAnswer({
+    await questionRepo.addAnswer('this-is-not-even-an-proper-id-123', {
       author: 'Adam Handers',
       summary: "The answer is so simple I just can't answer to it."
     })
