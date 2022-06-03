@@ -53,7 +53,34 @@ const makeQuestionRepository = fileName => {
     }
     return []
   }
-  const addAnswer = async (questionId, answer) => {}
+  const addAnswer = async (questionId, answer) => {
+    const question = getQuestionById(questionId)
+    if (question.length === 0) {
+      return 'fail'
+    }
+    const expectedKeys = ['author', 'summary']
+    if (Object.keys(answer).length != expectedKeys.length) {
+      return 'failed'
+    }
+    for (const key of expectedKeys) {
+      if (Object.keys(answer).find(value => value === key) === 'undefined') {
+        return 'failed'
+      }
+    }
+    answer = Object.assign({ id: v4() }, answer)
+    const questions = await getQuestions()
+    for (const questionIndex in Object.keys(questions)) {
+      if (questions[questionIndex].id === questionId) {
+        console.log(questions[questionIndex])
+        questions[questionIndex].answers.push(answer)
+      }
+    }
+
+    await writeFile(fileName, JSON.stringify(questions), {
+      encoding: 'utf-8'
+    })
+    return 'success'
+  }
 
   return {
     getQuestions,
