@@ -138,4 +138,43 @@ describe('question repository', () => {
       )
     ).toBe(true)
   })
+
+  test('should not do anything if any of the properties of the answers object is missing', async () => {
+    const before = JSON.stringify(
+      await questionRepo.getAnswers('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
+    )
+    await questionRepo.addAnswer({ test: 'test' })
+    const after = JSON.stringify(
+      await questionRepo.getAnswers('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
+    )
+    expect(before).toBe(after)
+  })
+
+  test('should not do anything if specified question does not exist', async () => {
+    const before = JSON.stringify(
+      await questionRepo.getAnswers('this-is-not-even-an-proper-id-123')
+    )
+    await questionRepo.addAnswer({
+      author: 'Adam Handers',
+      summary: "The answer is so simple I just can't answer to it."
+    })
+    const after = JSON.stringify(
+      await questionRepo.getAnswers('this-is-not-even-an-proper-id-123')
+    )
+    expect(before).toBe(after)
+  })
+
+  test('should add answer to question in repository', async () => {
+    await questionRepo.addAnswer('50cb7124-39ab-4380-b90a-19d9f4eccc7f', {
+      author: 'Adam Handers',
+      summary: "The answer is so simple I just can't answer to it."
+    })
+    expect(
+      JSON.stringify(
+        await questionRepo.getAnswers('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
+      ).includes(
+        `"author":"Adam Handers","summary":"The answer is so simple I just can't answer to it."`
+      )
+    ).toBe(true)
+  })
 })
