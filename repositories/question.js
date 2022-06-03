@@ -1,4 +1,5 @@
-const { readFile } = require('fs/promises')
+const { readFile, writeFile } = require('fs/promises')
+const { v4 } = require('uuid')
 
 const makeQuestionRepository = fileName => {
   const getQuestions = async () => {
@@ -17,7 +18,25 @@ const makeQuestionRepository = fileName => {
     }
     return []
   }
-  const addQuestion = async question => {}
+  const addQuestion = async question => {
+    const expectedKeys = ['author', 'summary']
+    if (Object.keys(question).length != expectedKeys.length) {
+      return 'failed'
+    }
+    for (const key of expectedKeys) {
+      if (Object.keys(question).find(value => value === key) === 'undefined') {
+        return 'failed'
+      }
+    }
+    question = Object.assign({ id: v4() }, question, { answers: [] })
+    const questions = await getQuestions()
+    questions.push(question)
+
+    await writeFile(fileName, JSON.stringify(questions), {
+      encoding: 'utf-8'
+    })
+    return 'success'
+  }
   const getAnswers = async questionId => {
     const question = await getQuestionById(questionId)
     if (question.answers) {
