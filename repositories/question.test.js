@@ -29,7 +29,7 @@ describe('question repository', () => {
         answers: []
       },
       {
-        id: faker.datatype.uuid(),
+        id: '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
         summary: 'Who are you?',
         author: 'Tim Doods',
         answers: []
@@ -39,5 +39,20 @@ describe('question repository', () => {
     await writeFile(TEST_QUESTIONS_FILE_PATH, JSON.stringify(testQuestions))
 
     expect(await questionRepo.getQuestions()).toHaveLength(2)
+  })
+  test('should return object with specified id', async () => {
+    expect(
+      await questionRepo.getQuestionById('50cb7124-39ab-4380-b90a-19d9f4eccc7f')
+    ).toEqual({
+      id: '50cb7124-39ab-4380-b90a-19d9f4eccc7f',
+      summary: 'Who are you?',
+      author: 'Tim Doods',
+      answers: []
+    })
+  })
+  test('should return empty list if question with specified id is not found', async () => {
+    expect(
+      await questionRepo.getQuestionById('this-is-not-even-an-proper-id-123')
+    ).toHaveLength(0)
   })
 })
